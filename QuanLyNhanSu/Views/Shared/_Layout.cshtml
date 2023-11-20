@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Quản lý nhân sự</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <style>
+        .custom-btn {
+            background-color: #8a2be2;
+            border-color: #8a2be2;
+            color: #ffffff;
+            transition: background-color 0.3s;
+        }
+
+            .custom-btn:hover {
+                background-image: linear-gradient(to right, #6a1a9b, #8a2be2);
+                transition: all 0.4s ease;
+            }
+        thead {
+            text-align: center;
+            background: -webkit-linear-gradient(45deg, #B2DFEE, #99E9F3, #8BCEF1);
+        }
+      
+    </style>
+</head>
+<body>
+
+
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer class="">
+            <p>&copy; @DateTime.Now.Year - Quản lý nhân sự</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

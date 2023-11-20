@@ -1,0 +1,66 @@
+﻿<head>
+    <style>
+        .custom-btn {
+            background-color: #8a2be2; /* Màu tím */
+            border-color: #8a2be2; /* Màu viền */
+            color: #ffffff; /* Màu chữ */
+            transition: background-color 0.3s; /* Hiệu ứng hover */
+        }
+
+            .custom-btn:hover {
+                background-image: linear-gradient(to right, #6a1a9b, #8a2be2);
+                transition: all 0.4s ease;
+            }
+    </style>
+</head>
+<div class="navbar navbar-inverse navbar-fixed-top he">
+@*    <div class="navbar navbar-default navbar-fixed-top">*@
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            @Html.ActionLink("Home", "Index", "NhanVien", null, new { @class = "navbar-brand" })
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+
+            @if (Session["MaNhanVien"] != null)
+            {
+
+                <ul class="nav navbar-nav navbar-right">
+                    @{
+                        String hoten = Session["MaNhanVien"] as String;
+                    }
+                    <li>
+                        <a class="dropdown-toggle" style="cursor: pointer;" data-toggle="dropdown">
+                            <span>
+                                @hoten
+                                <i class="glyphicon glyphicon-user"></i>
+                            </span>
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu-sanpham">
+
+                            <li role="presentation"><a name="Name" role="menuitem" tabindex="-1" href="@Url.Action("UpdateUser", "login")">Cập nhật thông tin</a></li>
+
+                           @* <li role="presentation" class="divider"></li>
+                            <li>@Html.ActionLink("Đăng Xuất", "DangXuat", "login")</li>*@
+
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink("Đăng Xuất", "DangXuat", "login")</li>
+                </ul>
+
+            }
+            else
+            {
+                <ul class="nav navbar-nav navbar-right">
+                    <li>@Html.ActionLink("Đăng nhập", "Login", "login")</li>
+                </ul>
+            }
+
+        </div>
+    </div>
+</div>

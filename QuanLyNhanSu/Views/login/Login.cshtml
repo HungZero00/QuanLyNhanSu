@@ -1,0 +1,32 @@
+﻿@{
+    ViewBag.Title = "Đăng nhập";
+}
+<link href="~/Content/css/login.css" rel="stylesheet" />
+<div class="wrapper">
+    <div class="title-text">
+        <div class="title login">Đăng nhập</div>
+    </div>
+    <div class="form-container">
+
+        <div class="form-inner">
+            @Html.AntiForgeryToken()
+            <form class="login" method="post" role="form" action="">
+
+                @* tai khoan *@
+                <div class="field">
+                    <input type="text" name="MaNhanVien" placeholder="Tài khoản" autofocus required>
+                </div>
+                @* mat khau *@
+                <div class="field">
+                    <input type="password" name="MatKhau" placeholder="Mật khẩu" required>
+                </div>
+                @* btn dang nhap *@
+                <div class="field btn">
+                    <div class="btn-layer"></div>
+                    <input type="submit" value="Login">
+                </div>
+                <span class="text-danger"> @ViewBag.err</span>
+            </form>
+        </div>
+    </div>
+</div>

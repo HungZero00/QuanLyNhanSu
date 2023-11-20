@@ -1,0 +1,27 @@
+﻿/*----------@****@-------------*/
+
+#table-taikhoan_filter {
+    border-radius: 5px;
+}
+
+    #table-taikhoan_filter label {
+        font-weight: bold;
+    }
+
+    #table-taikhoan_filter input[type="search"] {
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        padding: 5px;
+    }
+
+#table-taikhoan_length label {
+    font-weight: bold;
+    margin-right: 10px;
+
+}
+
+#table-taikhoan_length select {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    padding: 5px;
+}

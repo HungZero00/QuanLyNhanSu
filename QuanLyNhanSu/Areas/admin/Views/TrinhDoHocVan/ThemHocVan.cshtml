@@ -1,0 +1,121 @@
+﻿@using QuanLyNhanSu.Models
+@model TrinhDoHocVanValidation
+
+@{
+    ViewBag.Title = "ThemChucVu";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+    QuanLyNhanSuEntities1 db = new QuanLyNhanSuEntities1();
+    var bac1 = db.LuongBac1.ToList();
+
+}
+
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Thêm trình độ học vấn
+        </h1>
+    </div>
+</div>
+<form class="form-horizontal" role="form" method="post">
+
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        <!--start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Mã trình độ học vấn</label>
+        </div>
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="MaTrinhDoHocVan"
+                   class="form-control"
+                   id="MaTrinhDoHocVan"
+                   value="@Model.MaTrinhDoHocVan"
+                   required />
+
+        </div>
+        <div class="col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @ViewBag.err
+                @Html.ValidationMessageFor(model => model.MaTrinhDoHocVan)
+            </label>
+        </div>
+        <!--end-->
+    </div>
+
+    <div class="form-group">
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Tên trình độ học vấn</label>
+        </div>
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="TenTrinhDo"
+                   class="form-control"
+                   id="TenTrinhDo"
+                   value="@Model.TenTrinhDo"
+                   required />
+
+        </div>
+        <div class="col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+
+                @Html.ValidationMessageFor(n => n.TenTrinhDo)
+            </label>
+        </div>
+
+    </div>
+
+    <!--<div class="form-group">-->
+    <!--start-->
+    <!--<div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+        <label>Hệ số bậc lương</label>
+    </div>
+    <div class="col-md-4 col-sm-8">
+        <input type="text" name="HeSoBac"
+               class="form-control"
+               id="HeSoBac"
+               value="@Model.HeSoBac"
+               required />
+
+    </div>
+    <div class="col-sm-offset-4 col-sm-5" style="height:15px">
+        <label class="control-label text-danger">
+
+            @Html.ValidationMessageFor(model => model.HeSoBac)
+        </label>
+    </div>-->
+    <!--end-->
+    <!--</div>-->
+
+
+    <div class="form-group" id="form1">
+
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Hệ số bậc lương 1</label>
+        </div>
+        <div class="col-md-4 col-sm-8">
+            <input list="browsers1" name="HeSoBac" class="form-control" id="HeSoBac" value="@Model.HeSoBac">
+            <datalist id="browsers1">
+                @foreach (var item in bac1)
+                {
+                    <option value="@item.HeSo.ToString()">@item.HeSo </option>
+                }
+
+            </datalist>
+            @Html.ValidationMessageFor(model => model.HeSoBac)
+        </div>
+
+    </div>
+
+
+
+
+    <div class="form-group">
+        <div class="  col-md-offset-5 col-sm-offset-4 col-sm-5">
+            <input type="submit" value="Thêm trình độ học vấn" class="btn custom-btn" />
+            <a class="btn custom-btn" href="@Url.Action("index", "TrinhDoHocVan")">Quay về</a>
+        </div>
+    </div>
+
+</form>
+

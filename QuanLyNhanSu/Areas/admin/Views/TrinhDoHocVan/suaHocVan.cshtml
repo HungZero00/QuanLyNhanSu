@@ -1,0 +1,89 @@
+﻿@model QuanLyNhanSu.Models.TrinhDoHocVanValidation
+
+@{
+    ViewBag.Title = "suaChucVu";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Cập nhật Trình độ "@Model.TenTrinhDo"
+        </h1>
+    </div>
+</div>
+<div class="">
+    <div class=" col-md-6 col-md-offset-3">
+        @Html.AntiForgeryToken()
+        <form class="form-horizontal" method="post" role="form">
+
+            <div class="form-group hidden">
+                <div class="col-sm-4 control-label">
+                    <label>Mã trình độ học vấn</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" name="MaTrinhDoHocVan"
+                           class="form-control"
+                           maxlength="20"
+                           value="@Model.MaTrinhDoHocVan"
+                           required />
+                </div>
+                <div class="col-sm-offset-4 col-sm-5" style="height:15px">
+                    <label class="control-label text-danger">
+                        @Html.ValidationMessageFor(n => n.MaTrinhDoHocVan)
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-4 control-label">
+                    <label>Tên trình độ học vấn</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" name="TenTrinhDo"
+                           class="form-control"
+                           maxlength="20"
+                           value="@Model.TenTrinhDo.Trim()"
+                           required />
+                </div>
+                <div class="col-sm-offset-4 col-sm-5" style="height:15px">
+                    <label class="control-label text-danger">
+                        @Html.ValidationMessageFor(n => n.TenTrinhDo)
+                    </label>
+                    @*@ViewBag.MaNhanVien*@
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-4 control-label">
+                    <label>Hệ số bậc</label>
+                </div>
+                <div class="col-sm-8">
+                    <input type="text" name="HeSoBac"
+                           class="form-control"
+                           maxlength="20"
+                           value="@Model.HeSoBac"
+                           required />
+                </div>
+                <div class="col-sm-offset-4 col-sm-5" style="height:15px">
+                    <label class="control-label text-danger">
+                        @Html.ValidationMessageFor(n => n.HeSoBac)
+                    </label>
+                    @*@ViewBag.MaNhanVien*@
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <div class=" col-sm-offset-4 col-sm-5">
+                    <input type="submit" value="Lưu thay đổi" class="btn custom-btn" />
+                    <a class="btn custom-btn" href="@Url.Action("index", "TrinhDoHocVan")">Quay về</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+<div class="clearfix"></div>
+

@@ -1,0 +1,82 @@
+﻿@using QuanLyNhanSu.Models
+@model ChuyenNganhValidation
+        
+@{
+    ViewBag.Title = "Thêm chuyên ngành";
+}
+
+
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Thêm chuyên ngành
+        </h1>
+
+    </div>
+</div>
+<form class="form-horizontal" method="post" role="form">
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+
+
+    <div class="form-group">
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Mã chuyên ngành</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="MaChuyenNganh"
+                   class="form-control"
+                   id="MaChuyenNganh"
+                   value="@Model.MaChuyenNganh"
+                   required />
+
+        </div>
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @ViewBag.err
+                @Html.ValidationMessageFor(n => n.MaChuyenNganh)
+            </label>
+
+        </div>
+    </div>
+
+    @* ho ten *@
+    <div class="form-group">
+        <!---start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Họ tên</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="TenChuyenNganh"
+                   class="form-control"
+                   id="TenChuyenNganh"
+                   value="@Model.TenChuyenNganh"
+                   required />
+        </div>
+
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @Html.ValidationMessageFor(n => n.TenChuyenNganh)
+            </label>
+        </div>
+        <!---end--->
+    </div>
+
+   
+    @* button submit*@
+    <div class="form-group">
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5">
+            <input type="submit" value="Thêm chuyên ngành" class="btn custom-btn" />
+            <a class="btn custom-btn" href="@Url.Action("index", "ChuyenNganh")">Quay về</a>
+        </div>
+    </div>
+
+</form>
+
+
+
+

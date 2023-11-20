@@ -1,0 +1,133 @@
+﻿@model QuanLyNhanSu.Models.Home_Model
+
+
+
+@{
+    ViewBag.Title = "Danh sách khen thưởng";
+}
+
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Khen thưởng và kỷ luật nhân viên
+        </h1>
+    </div>
+</div>
+
+
+<div style="margin:10px">
+    <a class="btn custom-btn" href="@Url.Action("khen", "KhenThuong")">Khen Thưởng</a>
+    <a class="btn custom-btn" href="@Url.Action("kyluat", "KhenThuong")">Kỷ luật</a>
+    <a class="btn custom-btn" href="@Url.Action("thoiviec", "KhenThuong")">Thôi việc</a>
+</div>
+
+<table id="table-taikhoan" class="table table-responsive table-bordered table-striped">
+    <thead>
+        <tr >
+            <th>
+                Mã nhân viên
+            </th>
+            <th>
+               Họ và tên    
+            </th>
+            <th>
+                Tháng thưởng
+            </th>
+            <th>
+                Tháng kỉ luật
+            </th>
+            <th>
+                Lý do
+            </th>
+            <th>
+                Tiền thưởng
+            </th>
+            <th>
+                Tiền phạt
+            </th>
+            <th>
+                Ngày thôi việc
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.list_khenthuong)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NhanVien.HoTen)
+                </td>
+                <td>
+                    @String.Format("{0:dd/MM/yyyy}", @item.ThangThuong)
+                </td>
+                <td>0</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LyDo)
+                </td>
+                <td>
+                    @string.Format("{0:#,#}", @item.TienThuong).Replace(",", ",")
+
+                </td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+        }
+
+    </tbody>
+
+    <tbody>
+        @foreach (var item in Model.list_kyluat)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NhanVien.HoTen)
+                </td>
+                <td>0</td>
+                <td>
+                    @String.Format("{0:dd/MM/yyyy}", @item.ThangKiLuat)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LyDo)
+                </td>
+                <td>0</td>
+                <td>
+                    @string.Format("{0:#,#}", @item.TienKyLuat).Replace(",", ",")
+                </td>
+                <td>0</td>
+            </tr>
+        }
+    </tbody>
+    <tbody>
+        @foreach (var item in Model.list_thoiviec)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaNhanVien)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NhanVien.HoTen)
+                </td>
+                <td>0</td>
+                <td>0</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lydo)
+                </td>
+                <td>0</td>
+                <td>0</td>
+                <td>
+                    @String.Format("{0:dd/MM/yyyy}", @item.NgayThoiViec)
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
