@@ -12,21 +12,17 @@ namespace QuanLyNhanSu.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ChucVuNhanVien
+    public partial class TrangThai
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ChucVuNhanVien()
+        public TrangThai()
         {
-            this.ChamCongKPIs = new HashSet<ChamCongKPI>();
             this.NhanViens = new HashSet<NhanVien>();
         }
     
-        public string MaChucVuNV { get; set; }
-        public string TenChucVu { get; set; }
-        public Nullable<double> HSPC { get; set; }
+        public int TrangThaiID { get; set; }
+        public string TenTrangThai { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ChamCongKPI> ChamCongKPIs { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<NhanVien> NhanViens { get; set; }
     }

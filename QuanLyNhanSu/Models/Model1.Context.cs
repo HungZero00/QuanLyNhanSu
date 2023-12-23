@@ -27,6 +27,7 @@ namespace QuanLyNhanSu.Models
     
         public virtual DbSet<CapNhatLuong> CapNhatLuongs { get; set; }
         public virtual DbSet<CapNhatTrinhDoHocVan> CapNhatTrinhDoHocVans { get; set; }
+        public virtual DbSet<ChamCongKPI> ChamCongKPIs { get; set; }
         public virtual DbSet<ChiTietLuong> ChiTietLuongs { get; set; }
         public virtual DbSet<ChucVuNhanVien> ChucVuNhanViens { get; set; }
         public virtual DbSet<ChuyenNganh> ChuyenNganhs { get; set; }
@@ -42,6 +43,7 @@ namespace QuanLyNhanSu.Models
         public virtual DbSet<PhongBan> PhongBans { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<ThoiViec> ThoiViecs { get; set; }
+        public virtual DbSet<TrangThai> TrangThais { get; set; }
         public virtual DbSet<TrinhDoHocVan> TrinhDoHocVans { get; set; }
     }
 }

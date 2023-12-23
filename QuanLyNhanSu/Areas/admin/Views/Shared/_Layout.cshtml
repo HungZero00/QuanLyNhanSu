@@ -16,14 +16,14 @@
             height: 100%;
         }
 
-        /*.active {
-                    background: #0B0B0B;
-                    color: red;
-                }*/
-        /*.side-nav li.active {
-                    background-color: #fff;
-                }
-        */
+        .dropdown-menu {
+            transition: all 0.5s ease;
+        }
+
+            .dropdown-menu > li > a:hover {
+                background-color: #f8f9fa;
+                color: #343a40;
+            }
 
         thead {
             text-align: center;
@@ -33,7 +33,6 @@
         th {
             white-space: nowrap; /* Tránh xuống hàng */
             text-align: center;
-
         }
 
         .custom-btn {
@@ -47,6 +46,7 @@
                 background-image: linear-gradient(to right, #6a1a9b, #8a2be2);
                 transition: all 0.4s ease;
             }
+       
     </style>
 
 </head>
@@ -61,6 +61,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+
                 @Html.ActionLink("Admin", "Index", "Admin", null, new { @class = "navbar-brand" })
             </div>
             <!-- Top Menu Items -->
@@ -105,6 +106,9 @@
                     <li class="active">
                         <a href="@Url.Action("index", "ChuyenNganh")"><i class="fa fa-fw fa-book"></i> Chuyên ngành</a>
                     </li>
+                    <li class="active">
+                        <a href="@Url.Action("index", "ChamCong")"> <i class="fa fa-fw fa-calendar"></i> Chấm Công</a>
+                    </li>
 
                     <li class="active">
                         <a href="@Url.Action("index", "TrinhDoHocVan")">
@@ -115,7 +119,7 @@
                         <a href="@Url.Action("index","QuanLyLuong")"><i class="fa fa-money"></i> Lương nhân viên</a>
                     </li>
                     <li class="active">
-                        <a href="@Url.Action("index","KhenThuong")"><i class="fa fa-fw fa-trophy"></i> Khen thưởng</a>
+                        <a href="@Url.Action("index","KhenThuong")"><i class="fa fa-fw fa-trophy"></i> Tác vụ</a>
                     </li>
                     @*<li>
                             <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-user"></i> MaNhanVien <i class="fa fa-fw fa-caret-down"></i></a>
@@ -163,11 +167,11 @@
         $(window).on('scroll', function () {
             var scrollTop = $(window).scrollTop();
             if (scrollTop > 0) {
-                $('#top').show(500);
+                $('#top').show(100);
                 //$('#top').fadeIn(500);
             } else {
                 //$('#top').fadeOut(500);
-                $('#top').hide(500);
+                $('#top').hide(100);
             }
         });
 

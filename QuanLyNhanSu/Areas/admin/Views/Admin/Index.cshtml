@@ -30,7 +30,7 @@
                             </div>
                             <div class="col-xs-9 text-right">
                                 @{
-                                    var count = db.NhanViens.Where(n => n.TrangThai == true).ToList().Count - 1;
+                                    var count = db.NhanViens.Where(n => n.TrangThaiID == 2).ToList().Count - 1;
                                 }
                                 <div class="huge" style="font-size: 60px; text-shadow: 2px 2px 3px #000;">@count</div>
 
@@ -148,7 +148,7 @@
                                     var khen = db.ThoiViecs.ToList().Count();
                                 }
                                 <div class="huge" style="font-size: 60px; text-shadow: 2px 2px 3px #000;">@khen</div>
-                                <div>thôi việc</div>
+                                <div>Tổng số lần thôi việc</div>
                             </div>
                         </div>
                     </div>

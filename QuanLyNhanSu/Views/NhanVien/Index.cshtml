@@ -98,9 +98,9 @@
                     </td>
                     <td>
                         @{
-                            var t = int.Parse(item.TongTienLuong);
+                            int tongTienLuong = (int)decimal.Parse(item.TongTienLuong);
                         }
-                        @String.Format("{0:#,#}", @t).Replace(",", ",")
+                        @string.Format("{0:#,###}", tongTienLuong)
                     </td>
 
 

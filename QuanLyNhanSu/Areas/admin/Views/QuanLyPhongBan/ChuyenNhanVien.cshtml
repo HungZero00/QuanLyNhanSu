@@ -12,14 +12,6 @@
 
             Chuyển nhân viên @ViewBag.ten
         </h1>
-        <ol class="breadcrumb">
-            <li>
-                <i class="fa fa-fw fa-th-large"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
-            </li>
-            <li>
-                <i class="fa fa-fw fa-building"></i><a href="@Url.Action("index","QuanLyPhongBan")">Phòng ban</a>
-            </li>
-        </ol>
     </div>
 </div>
 
@@ -129,7 +121,7 @@
     @**@
 
     @{
-        LuanChuyenNhanVien chuyen = new LuanChuyenNhanVien();
+        LichSuChuyenNhanVien chuyen = new LichSuChuyenNhanVien();
     }
     <div class="form-group">
         <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
@@ -160,7 +152,7 @@
         <input type="text" name="QueQuan" value="@Model.QueQuan" />
         <input type="text" name="HinhAnh" value="@Model.HinhAnh" />
         <input type="text" name="DanToc" value="@Model.DanToc" />
-        <input type="text" name="sdt_NhanVien" value="@Model.sdt_NhanVien" />
+        <input type="text" name="sdt_NhanVien" value="@Model.SDT" />
         <input type="text" name="MaHopDong" value="@Model.MaHopDong" />
         <input type="text" name="NgaySinh" value="@Model.NgaySinh" />
         <input type="text" name="TrangThai" value="@Model.TrangThai" />
@@ -192,7 +184,8 @@
 
     <div class="form-group">
         <div class="  col-md-offset-5 col-sm-offset-4 col-sm-5">
-            <input type="submit" value="Xác nhận" class="btn btn-primary" />
+            <input type="submit" value="Xác nhận" class="btn custom-btn" />
+            <a class="btn custom-btn" href="@Url.Action("index", "QuanLyPhongBan")">Quay về</a>
         </div>
     </div>
 

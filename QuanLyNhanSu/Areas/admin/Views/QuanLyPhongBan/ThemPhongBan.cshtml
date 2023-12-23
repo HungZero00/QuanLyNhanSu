@@ -12,17 +12,7 @@
         <h1 class="page-header">
             Thêm phòng ban
         </h1>
-        <ol class="breadcrumb">
-            <li>
-                <i class="fa fa-fw fa-th-large"></i> <a href="@Url.Action("index","Admin")">Tổng quan</a>
-            </li>
-            <li>
-                <i class="fa fa-fw fa-building"></i><a href="@Url.Action("index","QuanLyPhongBan")">Phòng ban</a>
-            </li>
-            <li>
-                <i class="fa fa-fw fa-building"></i>Thêm phòng ban
-            </li>
-        </ol>
+       
     </div>
 </div>
 <form class="form-horizontal" role="form" method="post">
@@ -123,6 +113,7 @@
     <div class="form-group">
         <div class="  col-md-offset-5 col-sm-offset-4 col-sm-5">
             <input type="submit" value="Thêm phòng ban" class="btn custom-btn" />
+            <a class="btn custom-btn" href="@Url.Action("index", "QuanLyPhongBan")">Quay về</a>
         </div>
     </div>
 </form>

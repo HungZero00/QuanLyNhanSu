@@ -29,7 +29,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         public ActionResult khen()
         {
             var nv = db.NhanViens.ToList();
-
+             
             return View(new KhenThuong());
         }
         [HttpGet]
@@ -82,9 +82,15 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
 
             var nv = db.NhanViens.Where(n => n.MaNhanVien == tv.MaNhanVien).ToList();
             NhanVien nv1 = db.NhanViens.Find(tv.MaNhanVien);
-            if (nv1.TrangThai == true)
+            TrangThai tt = db.TrangThais.FirstOrDefault(x => x.TrangThaiID == nv1.TrangThaiID);
+            if (nv1.TrangThaiID == 2)
             {
-                nv1.TrangThai = false;
+
+                nv1.TrangThaiID = 1;
+            }
+            else 
+            {
+                nv1.TrangThaiID = 1;
             }
 
             ThoiViec ad = new ThoiViec();

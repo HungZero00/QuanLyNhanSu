@@ -27,10 +27,10 @@ namespace QuanLyNhanSu.Controllers
         [HttpPost]
         public ActionResult Login(NhanVien user)
         {
-            
+
             //check email da ton tai chua
             var checkaccount = db.NhanViens.Any(x => x.MaNhanVien == user.MaNhanVien &&
-                x.MatKhau == user.MatKhau && x.TrangThai == true);
+                x.MatKhau == user.MatKhau && x.TrangThaiID == 2);
             var checkadmin = db.NhanViens.Any(x => x.MaNhanVien == user.MaNhanVien &&
                     x.MaNhanVien == "admin" &&
                     x.MatKhau == user.MatKhau
@@ -69,24 +69,25 @@ namespace QuanLyNhanSu.Controllers
             UserValidate up = new UserValidate();
             var id = Session["MaNhanVien"] as String;
             var us = db.NhanViens.Where(n => n.MaNhanVien == id).FirstOrDefault();
-               if(us!=null){
-            up.MaNhanVien = us.MaNhanVien;
-            up.HinhAnh = us.HinhAnh;
-            up.MatKhau = us.MatKhau;
-            up.XacNhanMatKhau = us.MatKhau;
-            up.HoTen = us.HoTen;
-            up.NgaySinh = us.NgaySinh;
-            up.QueQuan = us.QueQuan;
-            up.GioiTinh = us.GioiTinh;
-            up.DanToc = us.DanToc;
-            up.sdt_NhanVien = us.SDT;
-            up.MaChuyenNganh = us.MaChuyenNganh;
-            up.MaTrinhDoHocVan = us.MaTrinhDoHocVan;
-            up.CMND = us.CMND;
+            if (us != null)
+            {
+                up.MaNhanVien = us.MaNhanVien;
+                up.HinhAnh = us.HinhAnh;
+                up.MatKhau = us.MatKhau;
+                up.XacNhanMatKhau = us.MatKhau;
+                up.HoTen = us.HoTen;
+                up.NgaySinh = us.NgaySinh;
+                up.QueQuan = us.QueQuan;
+                up.GioiTinh = us.GioiTinh;
+                up.DanToc = us.DanToc;
+                up.sdt_NhanVien = us.SDT;
+                up.MaChuyenNganh = us.MaChuyenNganh;
+                up.MaTrinhDoHocVan = us.MaTrinhDoHocVan;
+                up.CMND = us.CMND;
 
-            return View(up);
-               }
-               return Redirect("~/");
+                return View(up);
+            }
+            return Redirect("~/");
         }
         [HttpPost]
         public ActionResult UpDateUser(UserValidate us, HttpPostedFileBase HinhAnh)
@@ -95,7 +96,7 @@ namespace QuanLyNhanSu.Controllers
             {
                 var up = db.NhanViens.Where(n => n.MaNhanVien == us.MaNhanVien).FirstOrDefault();
                 up.MaNhanVien = us.MaNhanVien;
-                
+
                 up.MatKhau = us.MatKhau;
                 up.MatKhau = us.XacNhanMatKhau;
                 up.HoTen = us.HoTen;
@@ -110,8 +111,7 @@ namespace QuanLyNhanSu.Controllers
 
                 if (us.HinhAnh != null)
                 {
-                    HinhAnh.SaveAs(HttpContext.Server.MapPath("~/Content/images/")
-                                                             + HinhAnh.FileName);
+                    HinhAnh.SaveAs(HttpContext.Server.MapPath("~/Content/images/") + HinhAnh.FileName);
                     up.HinhAnh = HinhAnh.FileName;
                     us.HinhAnh = HinhAnh.FileName;
                     //user.Image = userVal.Image;
@@ -120,7 +120,7 @@ namespace QuanLyNhanSu.Controllers
                 {
                     us.HinhAnh = up.HinhAnh;
                 }
-
+         
                 db.SaveChanges();
                 return View(us);
             }

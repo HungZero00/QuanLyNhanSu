@@ -1,0 +1,256 @@
+﻿@using QuanLyNhanSu.Models
+@model ChamCongKPIValdation
+
+@{
+    ViewBag.Title = "Thêm chấm công";
+    Layout = "~/Areas/admin/Views/Shared/_Layout.cshtml";
+    QuanLyNhanSuEntities1 db = new QuanLyNhanSuEntities1();
+    var nhanvien = db.NhanViens.Where(n => n.MaNhanVien != "admin").ToList();
+}
+
+<div class="">
+    <div class="">
+        <h1 class="page-header">
+            Thêm chấm công
+        </h1>
+
+    </div>
+</div>
+<form class="form-horizontal" method="post" role="form">
+    @Html.AntiForgeryToken()
+
+    @Html.ValidationSummary(true)
+
+
+    <div class="form-group hidden">
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>ID</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="id"
+                   class="form-control"
+                   id="id"
+                   value="@Model.id"
+                   required />
+
+        </div>
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @ViewBag.err
+                @Html.ValidationMessageFor(n => n.id)
+            </label>
+
+        </div>
+    </div>
+
+    @*Mã nhân viên *@
+    <div class="form-group">
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Nhân viên</label>
+        </div>
+        <div class="col-md-4 col-sm-8">
+
+            <select id="nhanvienDropdown" name="MaNhanvien" class="form-control">
+                <option value="@Model.MaNhanVien">-----Chọn nhân viên-----</option>
+                @foreach (var item in nhanvien)
+                {
+                    <option value="@item.MaNhanVien.ToString()" data-chucvu="@item.MaChucVuNV" data-hoten="@item.HoTen" data-phongban="@item.MaPhongBan">
+                        @item.MaNhanVien - @item.HoTen
+                    </option>
+                }
+            </select>
+
+            @Html.ValidationMessageFor(model => model.MaNhanVien)
+        </div>
+    </div>
+    @* ho ten *@
+    <div class="form-group">
+        <!---start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Họ tên</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="HoTen"
+                   class="form-control"
+                   id="HoTen"
+                   list="browsers"
+                   value="@Model.HoTen"
+                   required />
+        </div>
+
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @Html.ValidationMessageFor(n => n.HoTen)
+            </label>
+        </div>
+        <!---end--->
+    </div>
+    @* Chuc vu *@
+    <div class="form-group hidden">
+        <!---start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Chức vụ</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="MaChucVuNV"
+                   class="form-control"
+                   id="MaChucVuNV"
+                   value="@Model.MaChucVuNV"
+                   required />
+        </div>
+
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @Html.ValidationMessageFor(n => n.MaChucVuNV)
+            </label>
+        </div>
+        <!---end--->
+    </div>
+    @* Phòng ban *@
+    <div class="form-group hidden">
+        <!---start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Phòng ban</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="MaPhongBan"
+                   class="form-control"
+                   id="MaPhongBan"
+                   value="@Model.MaPhongBan"
+                   required />
+        </div>
+
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @Html.ValidationMessageFor(n => n.MaPhongBan)
+            </label>
+        </div>
+        <!---end--->
+    </div>
+    @* tên ThangChamCong *@
+    <div class="form-group">
+        <!---start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Tháng chấm công</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="date" name="ThangChamCong"
+                   class="form-control"
+                   id="ThangChamCong"
+                   value="@Model.ThangChamCong"
+                   required />
+        </div>
+
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @Html.ValidationMessageFor(n => n.ThangChamCong)
+            </label>
+        </div>
+        <!---end--->
+    </div>
+    @* tên SoLuongCVHoanThanh *@
+    <div class="form-group">
+        <!---start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Số lượng công việc hoàn thành</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="SoLuongCVHoanThanh"
+                   class="form-control"
+                   id="SoLuongCVHoanThanh"
+                   value="@Model.SoLuongCVHoanThanh"
+                   required />
+        </div>
+
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @Html.ValidationMessageFor(n => n.SoLuongCVHoanThanh)
+            </label>
+        </div>
+        <!---end--->
+    </div>
+    @* tên ghi chú *@
+    <div class="form-group">
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label for="GhiChu">Ghi chú</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <textarea name="GhiChu" id="GhiChu" class="form-control" rows="5">@Model.GhiChu</textarea>
+        </div>
+
+        <div class="col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">@Html.ValidationMessageFor(n => n.GhiChu)</label>
+        </div>
+    </div>
+
+
+    @* Điểm số*@
+    <div class="form-group">
+        <!---start-->
+        <div class="control-label col-md-offset-1 col-md-4 col-sm-4">
+            <label>Điểm số</label>
+        </div>
+
+        <div class="col-md-4 col-sm-8">
+            <input type="text" name="DiemSo"
+                   class="form-control"
+                   id="DiemSo"
+                   value="@Model.DiemSo"
+                   required />
+        </div>
+
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5" style="height:15px">
+            <label class="control-label text-danger">
+                @Html.ValidationMessageFor(n => n.DiemSo)
+            </label>
+        </div>
+        <!---end--->
+    </div>
+
+
+    @* button submit*@
+    <div class="form-group">
+        <div class=" col-md-offset-5 col-sm-offset-4 col-sm-5">
+            <input type="submit" value="Thêm chấm công" class="btn custom-btn" />
+            <a class="btn custom-btn" href="@Url.Action("index", "ChamCong")">Quay về</a>
+        </div>
+    </div>
+
+</form>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Sự kiện chọn từ dropdown list
+        $("#nhanvienDropdown").change(function () {
+            // Lấy giá trị đã chọn
+            var selectedValue = $(this).val();
+
+            // Tìm phần tử option tương ứng
+            var selectedOption = $("#nhanvienDropdown option[value='" + selectedValue + "']");
+
+            // Lấy dữ liệu từ các thuộc tính data
+            var chucvu = selectedOption.data("chucvu");
+            var hoten = selectedOption.data("hoten");
+            var phongban = selectedOption.data("phongban");
+
+            // Điền thông tin vào các trường input
+            $("#HoTen").val(hoten);
+            $("#MaChucVuNV").val(chucvu);
+            $("#MaPhongBan").val(phongban);
+
+            // Log to console
+            console.log("Change event triggered");
+            console.log("HoTen: " + hoten);
+            console.log("chucvu: " + chucvu);
+            console.log("phongban: " + phongban);
+        });
+    });
+</script>

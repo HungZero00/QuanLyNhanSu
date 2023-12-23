@@ -12,7 +12,7 @@
 <!--nguoi dung cap nhat-->
 @Html.Partial("_LoginPartial")
 <div class="row">
-    <h1>Cập nhật thông tin nhân viên</h1>
+    <h1 style="margin-top: 39px;">Cập nhật thông tin nhân viên</h1>
     <hr />
     <div class="col-md-4 col-sm-3 ">
         <img id="avatar" src="~/Content/images/@Model.HinhAnh" class="img-circle img-responsive img-thumbnail">
@@ -56,18 +56,29 @@
                     @Html.ValidationMessageFor(model => model.HoTen)
                 </div>
             </div>
+
             <!--ngay sinh-->
             <div class="form-group">
                 <div class="control-label col-md-4 col-sm-6">
                     <label>Ngày sinh</label>
                 </div>
                 <div class="col-md-8 col-sm-8">
-                    <input class="form-control"
-                           value="@String.Format("{0:MM-dd-yyyy}", @Model.NgaySinh)"
-                           type="date" name="NgaySinh" 
-                           placeholder="MM-DD-YYYY"
-                           required pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}"
-                           title="Nhập đúng định dạng MM-DD-YYYY" />
+                    @if (Model.NgaySinh.HasValue)
+                    {
+                        <input class="form-control" type="date" name="NgaySinh" value="@(Model.NgaySinh.Value.ToString("yyyy-MM-dd"))"
+                               type="date" name="NgaySinh"
+                               placeholder="MM-DD-YYYY"
+                               required pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}"
+                               title="Nhập đúng định dạng MM-DD-YYYY" />
+                    }
+                    else
+                    {
+                        <input class="form-control" type="date" name="NgaySinh" value="@(DateTime.Now.ToString("yyyy-MM-dd"))"
+                               type="date" name="NgaySinh"
+                               placeholder="MM-DD-YYYY"
+                               required pattern="[0-9]{2}-[0-9]{2}-[0-9]{4}"
+                               title="Nhập đúng định dạng MM-DD-YYYY" />
+                    }
 
                     @*<input class="form-control" type="date" name="NgaySinh" value="@Model.NgaySinh" />*@
                     @Html.ValidationMessageFor(model => model.NgaySinh)
@@ -178,7 +189,17 @@
                 </div>
             </div>
 
+            <!--ho ten-->
+            <div class="form-group hidden">
+                <div class="control-label col-md-4 col-sm-4">
+                    <label>Trình độ học vấn</label>
+                </div>
+                <div class="col-md-8 col-sm-8">
+                    <input class="form-control" type="text" name="MaTrinhDoHocVan" value=" @Model.MaTrinhDoHocVan" />
 
+                    @Html.ValidationMessageFor(model => model.MaTrinhDoHocVan)
+                </div>
+            </div>
             <!--cmnd-->
             <div class="form-group">
                 <div class="control-label col-md-4 col-sm-4">

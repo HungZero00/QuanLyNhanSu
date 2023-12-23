@@ -10,6 +10,9 @@ using System.IO;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Data;
+using System.Data.Entity.Migrations;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace QuanLyNhanSu.Areas.admin.Controllers
 {
@@ -20,7 +23,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         // GET: /admin/QuanLyUser/
         public ActionResult Index()
         {
-            var user = db.NhanViens.Where(x => x.MaNhanVien != "admin" && x.TrangThai == true).ToList();
+            var user = db.NhanViens.Where(x => x.MaNhanVien != "admin" && x.TrangThaiID == 2).ToList();
             return View(user);
         }
 
@@ -63,7 +66,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             userVal.MaHopDong = user.MaHopDong;
 
             userVal.NgaySinh = user.NgaySinh;
-            userVal.TrangThai = user.TrangThai;
+            userVal.TrangThaiID = (int)user.TrangThaiID;
             userVal.MaChuyenNganh = user.MaChuyenNganh;
             userVal.MaTrinhDoHocVan = user.MaTrinhDoHocVan;
             userVal.MaPhongBan = user.MaPhongBan;
@@ -105,7 +108,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                     us.MaHopDong = upUser.MaHopDong;
 
                     us.NgaySinh = upUser.NgaySinh;
-                    us.TrangThai = upUser.TrangThai;
+                    us.TrangThaiID = upUser.TrangThaiID;
                     us.MaChuyenNganh = upUser.MaChuyenNganh;
                     us.MaTrinhDoHocVan = upUser.MaTrinhDoHocVan;
                     us.MaPhongBan = upUser.MaPhongBan;
@@ -120,11 +123,11 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                         luong.HeSoLuong = luong.HeSoLuong < (double)trinhdo.HeSoBac ? (double)trinhdo.HeSoBac : luong.HeSoLuong;
                     }
                     else
-                    { luong.HeSoLuong = 1; }
+                    {
+                        luong.HeSoLuong = 1;
+                    }
 
-
-
-                    db.CapNhatTrinhDoHocVans.Add(capNhat);
+                    db.CapNhatTrinhDoHocVans.AddOrUpdate(capNhat);
 
                     db.SaveChanges();
                     return Redirect("/admin/QuanLyUser");
@@ -187,7 +190,7 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                     nvAdd.MaChuyenNganh = nv.MaChuyenNganh;
                     nvAdd.MaTrinhDoHocVan = nv.MaTrinhDoHocVan;
                     nvAdd.MaHopDong = nv.MaNhanVien;
-                    nvAdd.TrangThai = true;
+                    nvAdd.TrangThaiID = 2;
                     nvAdd.HinhAnh = "no-photo.jfif";
 
                     //add hop dong
@@ -219,9 +222,6 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                         { luong.PhuCap = 0; }
                     }
 
-                   
-
-
                     // tmp.Image = "~/Content/images/icon.jpg";
                     db.NhanViens.Add(nvAdd);
                     db.HopDongs.Add(hd);
@@ -242,7 +242,53 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 return View(nv);
             }
         }//end add nhan vien
+        public ActionResult HopDong()
+        {
+            var hd = db.HopDongs.ToList();
 
+            return View(hd);
+        }
+
+        [HttpGet]
+        public ActionResult SuaHopDong(String id)
+        {
+            var hd = db.HopDongs.Where(n => n.MaHopDong == id).FirstOrDefault();
+            HopDong hopdong = new HopDong();
+
+            hopdong.MaHopDong = hd.MaHopDong;
+            hopdong.LoaiHopDong = hd.LoaiHopDong;
+            hopdong.NgayBatDau = hd.NgayBatDau;
+            hopdong.NgayKetThuc = hd.NgayKetThuc;
+            hopdong.NoiDung = hd.NoiDung;
+
+            return View(hopdong);
+            //  return View(hopdong);
+        }
+        [HttpPost]
+        public ActionResult SuaHopDong(HopDong uphd)
+        {
+            var hd = db.HopDongs.Where(n => n.MaHopDong == uphd.MaHopDong).FirstOrDefault();
+
+            if (ModelState.IsValid)
+            {
+                //var us = db.NhanViens.Where(n => n.MaNhanVien == upUser.MaNhanVien).FirstOrDefault();
+                if (hd != null)
+                {
+                    hd.MaHopDong = uphd.MaHopDong;
+                    hd.LoaiHopDong = uphd.LoaiHopDong;
+                    hd.NgayBatDau = uphd.NgayBatDau;
+                    hd.NgayKetThuc = uphd.NgayKetThuc;
+                    hd.NoiDung = uphd.NoiDung;
+
+                    db.HopDongs.AddOrUpdate(uphd);
+                    db.SaveChanges();
+                    return Redirect("/admin/QuanLyUser/HopDong");
+
+                }
+            }
+            return View(uphd);
+
+        }//end update
         public ActionResult QuaTrinhCongTac(String id)
         {
             var ds = db.LichSuChuyenNhanViens.Where(n => n.MaNhanVien == id).ToList();
@@ -251,58 +297,61 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
 
         public ActionResult XuatFileExel()
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             var ds = db.NhanViens.Where(n => n.MaNhanVien != "admin" && n.MaHopDong != null).ToList();
             var phong = db.PhongBans.ToList();
-            var gv = new GridView();
-            //===================================================
-            DataTable dt = new DataTable();
-            //Add Datacolumn
-            DataColumn workCol = dt.Columns.Add("Họ tên", typeof(String));
 
-            dt.Columns.Add("Phòng ban", typeof(String));
-            dt.Columns.Add("Chức vụ", typeof(String));
-            dt.Columns.Add("Học vấn", typeof(String));
-            dt.Columns.Add("Chuyên ngành", typeof(String));
-
-            //Add in the datarow
-
-
-            foreach (var item in ds)
+            using (ExcelPackage pck = new ExcelPackage())
             {
-                DataRow newRow = dt.NewRow();
-                newRow["Họ tên"] = item.HoTen;
-                newRow["Phòng ban"] = item.PhongBan.TenPhongBan;
-                newRow["Chức vụ"] = item.ChucVuNhanVien.TenChucVu;
-                newRow["Học vấn"] = item.TrinhDoHocVan.TenTrinhDo;
-                newRow["Chuyên ngành"] = item.ChuyenNganh.TenChuyenNganh;
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Sheet1");
 
-                dt.Rows.Add(newRow);
+                ws.Cells["A1"].Value = "Họ tên";
+                ws.Cells["B1"].Value = "Phòng ban";
+                ws.Cells["C1"].Value = "Chức vụ";
+                ws.Cells["D1"].Value = "Học vấn";
+                ws.Cells["E1"].Value = "Chuyên ngành";
+
+                // tiêu đề in đậm
+                ws.Cells["A1:E1"].Style.Font.Bold = true;
+
+                /*  // Tạo khung tiêu đề
+                  ws.Cells["A1:E1"].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                  ws.Cells["A1:E1"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                  ws.Cells["A1:E1"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                  ws.Cells["A1:E1"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;*/
+
+
+                int rowStart = 2;
+                foreach (var item in ds)
+                {
+                    ws.Cells[string.Format("A{0}", rowStart)].Value = item.HoTen;
+                    ws.Cells[string.Format("B{0}", rowStart)].Value = item.PhongBan.TenPhongBan;
+                    ws.Cells[string.Format("C{0}", rowStart)].Value = item.ChucVuNhanVien.TenChucVu;
+                    ws.Cells[string.Format("D{0}", rowStart)].Value = item.TrinhDoHocVan.TenTrinhDo;
+                    ws.Cells[string.Format("E{0}", rowStart)].Value = item.ChuyenNganh.TenChuyenNganh;
+
+                    rowStart++;
+                }
+                // Tạo khung cho tất cả các ô dữ liệu
+                var cellRange = ws.Cells[1, 1, rowStart - 1, 5];
+                cellRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                cellRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                cellRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                cellRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+
+                // Auto mở rộng cột cho phù hợp với văn bản
+                ws.Cells[ws.Dimension.Address].AutoFitColumns();
+
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment; filename=Nhan_vien.xlsx");
+                Response.BinaryWrite(pck.GetAsByteArray());
+                Response.End();
             }
 
-            //====================================================
-            gv.DataSource = dt;
-            // gv.DataSource = ds;
-            gv.DataBind();
-
-            Response.ClearContent();
-            Response.Buffer = true;
-
-            Response.AddHeader("content-disposition", "attachment; filename=Nhân_viên.xls");
-            Response.ContentType = "application/ms-excel";
-
-            Response.Charset = "";
-            StringWriter objStringWriter = new StringWriter();
-            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
-
-            gv.RenderControl(objHtmlTextWriter);
-
-            Response.Output.Write(objStringWriter.ToString());
-            Response.Flush();
-            Response.End();
             return Redirect("/admin/QuanLyUser");
         }
-
         public ActionResult QuaTrinhHoc(String id)
         {
             var ht = db.CapNhatTrinhDoHocVans.Where(n => n.MaNhanVien == id).ToList();

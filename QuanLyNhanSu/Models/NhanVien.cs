@@ -18,6 +18,7 @@ namespace QuanLyNhanSu.Models
         public NhanVien()
         {
             this.CapNhatTrinhDoHocVans = new HashSet<CapNhatTrinhDoHocVan>();
+            this.ChamCongKPIs = new HashSet<ChamCongKPI>();
             this.KhenThuongs = new HashSet<KhenThuong>();
             this.KhenThuongs1 = new HashSet<KhenThuong>();
             this.KyLuats = new HashSet<KyLuat>();
@@ -38,7 +39,7 @@ namespace QuanLyNhanSu.Models
         public string DanToc { get; set; }
         public string SDT { get; set; }
         public string MaChucVuNV { get; set; }
-        public bool TrangThai { get; set; }
+        public Nullable<int> TrangThaiID { get; set; }
         public string MaPhongBan { get; set; }
         public string MaHopDong { get; set; }
         public string MaChuyenNganh { get; set; }
@@ -47,6 +48,8 @@ namespace QuanLyNhanSu.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CapNhatTrinhDoHocVan> CapNhatTrinhDoHocVans { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<ChamCongKPI> ChamCongKPIs { get; set; }
         public virtual ChucVuNhanVien ChucVuNhanVien { get; set; }
         public virtual ChuyenNganh ChuyenNganh { get; set; }
         public virtual ChuyenNganh ChuyenNganh1 { get; set; }
@@ -68,6 +71,7 @@ namespace QuanLyNhanSu.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ThoiViec> ThoiViecs { get; set; }
         public virtual TrinhDoHocVan TrinhDoHocVan { get; set; }
+        public virtual TrangThai TrangThai { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ThoiViec> ThoiViecs1 { get; set; }
     }

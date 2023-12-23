@@ -136,12 +136,14 @@
         </div>
         <div class="col-md-4 col-sm-8">
             @{QuanLyNhanSuEntities1 db = new QuanLyNhanSuEntities1();
+
                 var chucvu = db.ChucVuNhanViens.ToList();
             }
             <select name="MaChucVuNV" class="form-control">
+                <option value=""  disabled selected>--- Chọn danh sách ---</option>
                 @foreach (var item in chucvu)
                 {
-                    <option value="@item.MaChucVuNV.ToString()" selected>@item.TenChucVu</option>
+                    <option value="@item.MaChucVuNV.ToString()" @(item.MaChucVuNV == Model.MaChucVuNV ? "selected" : "")>@item.TenChucVu </option>
                 }
             </select>
 
@@ -158,9 +160,10 @@
                 var phongban = db.PhongBans.ToList();
             }
             <select name="MaPhongBan" class="form-control">
+                <option value="" disabled selected>--- Chọn danh sách ---</option>
                 @foreach (var item in phongban)
                 {
-                    <option value="@item.MaPhongBan.ToString()" selected>@item.TenPhongBan</option>
+                    <option value="@item.MaPhongBan.ToString()" @(item.MaPhongBan == Model.MaPhongBan ? "selected" : "")>@item.TenPhongBan</option>
                 }
             </select>
             @Html.ValidationMessageFor(model => model.MaPhongBan)
@@ -176,9 +179,10 @@
                 var chuyenNganh = db.ChuyenNganhs.ToList();
             }
             <select name="MaChuyenNganh" class="form-control">
+                <option value="" disabled selected>--- Chọn danh sách ---</option>
                 @foreach (var item in chuyenNganh)
                 {
-                    <option value="@item.MaChuyenNganh.ToString()" selected>@item.TenChuyenNganh</option>
+                    <option value="@item.MaChuyenNganh.ToString()" @(item.MaChuyenNganh == Model.MaChuyenNganh ? "selected" : "")>@item.TenChuyenNganh</option>
                 }
             </select>
 
@@ -194,9 +198,10 @@
                 var hocVan = db.TrinhDoHocVans.ToList();
             }
             <select name="MaTrinhDoHocVan" class="form-control">
+                <option value="" disabled selected>--- Chọn danh sách ---</option>
                 @foreach (var item in hocVan)
                 {
-                    <option value="@item.MaTrinhDoHocVan.ToString()" selected>@item.TenTrinhDo</option>
+                    <option value="@item.MaTrinhDoHocVan.ToString()" @(item.MaTrinhDoHocVan == Model.MaTrinhDoHocVan ? "selected" : "")>@item.TenTrinhDo</option>
                 }
             </select>
         </div>

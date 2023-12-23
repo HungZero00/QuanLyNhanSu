@@ -8,6 +8,9 @@ using System.Data;
 using System.Web.UI.WebControls;
 using System.IO;
 using System.Web.UI;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
+
 namespace QuanLyNhanSu.Areas.admin.Controllers
 {
     public class QuanLyPhongBanController : AuthorController
@@ -226,55 +229,63 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
 
         public ActionResult XuatFileExel(String id)
         {
-            //xXuatFileExel danh sach phong ABC
+            // Đặt môi trường cấp phép cho EPPlus
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+            // Lấy danh sách nhân viên từ cơ sở dữ liệu
             var ds = db.NhanViens.Where(n => n.MaPhongBan == id).ToList();
             var phong = db.PhongBans.ToList();
 
-            //===================================================
-            DataTable dt = new DataTable();
-            //Add Datacolumn
-            DataColumn workCol = dt.Columns.Add("Họ tên", typeof(String));
-
-            dt.Columns.Add("Phòng ban", typeof(String));
-            dt.Columns.Add("Chức vụ", typeof(String));
-            dt.Columns.Add("Học vấn", typeof(String));
-            dt.Columns.Add("Chuyên ngành", typeof(String));
-
-            //Add in the datarow
-            foreach (var item in ds)
+            using (ExcelPackage pck = new ExcelPackage())
             {
-                DataRow newRow = dt.NewRow();
-                newRow["Họ tên"] = item.HoTen;
-                newRow["Phòng ban"] = item.PhongBan.TenPhongBan;
-                newRow["Chức vụ"] = item.ChucVuNhanVien.TenChucVu;
-                newRow["Học vấn"] = item.TrinhDoHocVan.TenTrinhDo;
-                newRow["Chuyên ngành"] = item.ChuyenNganh.TenChuyenNganh;
+                // Tạo một worksheet mới
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Sheet1");
 
-                dt.Rows.Add(newRow);
+                // Đặt tiêu đề cho các cột
+                ws.Cells["A1"].Value = "Họ tên";
+                ws.Cells["B1"].Value = "Phòng ban";
+                ws.Cells["C1"].Value = "Chức vụ";
+                ws.Cells["D1"].Value = "Học vấn";
+                ws.Cells["E1"].Value = "Chuyên ngành";
+
+                // Đặt tiêu đề in đậm
+                ws.Cells["A1:E1"].Style.Font.Bold = true;
+
+                int rowStart = 2;
+                foreach (var item in ds)
+                {
+                    // Thêm dữ liệu cho mỗi hàng
+                    ws.Cells[string.Format("A{0}", rowStart)].Value = item.HoTen;
+                    ws.Cells[string.Format("B{0}", rowStart)].Value = item.PhongBan.TenPhongBan;
+                    ws.Cells[string.Format("C{0}", rowStart)].Value = item.ChucVuNhanVien.TenChucVu;
+                    ws.Cells[string.Format("D{0}", rowStart)].Value = item.TrinhDoHocVan.TenTrinhDo;
+                    ws.Cells[string.Format("E{0}", rowStart)].Value = item.ChuyenNganh.TenChuyenNganh;
+
+                    rowStart++;
+                }
+
+                // Tạo khung cho tất cả các ô dữ liệu
+                var cellRange = ws.Cells[1, 1, rowStart - 1, 5];
+                cellRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                cellRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                cellRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                cellRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+
+                // Điều chỉnh độ rộng của các cột để phù hợp với nội dung
+                ws.Cells[ws.Dimension.Address].AutoFitColumns();
+
+                // Chuẩn bị response, đặt loại nội dung và tên file
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment; filename=Danh-sach.xlsx");
+
+                // Gửi file Excel như một phần của response
+                Response.BinaryWrite(pck.GetAsByteArray());
+                Response.End();
             }
 
-            //====================================================
-            var gv = new GridView();
-            gv.DataSource = dt.AsDataView();
-            // gv.DataSource = ds;
-            gv.DataBind();
-
-            Response.ClearContent();
-            Response.Buffer = true;
-
-            Response.AddHeader("content-disposition", "attachment; filename=danh-sach.xls");
-            Response.ContentType = "application/ms-excel";
-
-            Response.Charset = "";
-            StringWriter objStringWriter = new StringWriter();
-            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
-
-            gv.RenderControl(objHtmlTextWriter);
-
-            Response.Output.Write(objStringWriter.ToString());
-            Response.Flush();
-            Response.End();
+            // Chuyển hướng đến trang QuanLyPhongBan
             return Redirect("/admin/QuanLyPhongBan");
-        }// xuat file nhan vien
+        }
     }//end classs
 }

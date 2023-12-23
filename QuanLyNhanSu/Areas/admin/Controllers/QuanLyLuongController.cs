@@ -10,6 +10,8 @@ using System.Web.UI;
 using System.Data;
 using System.Data.Entity.Migrations;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
+using OfficeOpenXml;
+using OfficeOpenXml.Style;
 
 namespace QuanLyNhanSu.Areas.admin.Controllers
 {
@@ -80,11 +82,43 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         public ActionResult ThanhToanLuong()
         {
             var luong = db.Luongs.ToList();
-
+            var chamcong = db.ChamCongKPIs.ToList();
 
 
             foreach (var item in luong)
             {
+               
+                double hsl = item.HeSoLuong ?? 0.0;
+                double originalHsl = hsl;
+                foreach (var chamcong1 in chamcong)
+                {
+
+                    // Tính hệ số lương dựa trên điểm số
+                    if (chamcong1.DiemSo == 100)
+                    {
+                        hsl = originalHsl;
+                    }
+                    else if (chamcong1.DiemSo >= 60 && chamcong1.DiemSo <= 90)
+                    {
+                        hsl = originalHsl - originalHsl * 0.1;
+                    }
+                    else if (chamcong1.DiemSo == 50)
+                    {
+                        hsl = originalHsl - originalHsl * 0.2;
+                    }
+                    else if (chamcong1.DiemSo < 50)
+                    {
+                        hsl = originalHsl - originalHsl * 0.3;
+                    }
+                    else
+                    {
+                        hsl = originalHsl;
+                    }
+                    /*
+                                        // Cộng dồn vào tổng lương
+                                        tonghsl = hsl;*/
+                }
+
                 Random random = new Random();
                 string newCode = "MCTL" + random.Next(100000, 999999).ToString();
 
@@ -97,9 +131,9 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
 
                 double tienthue = 0, phucap = 0;
                 double tong = 0;
-                item.HeSoLuong = item.HeSoLuong == null ? 0 : item.HeSoLuong;
-                ct.LuongCoBan = item.LuongToiThieu * (double)item.HeSoLuong;
-
+               /* item.HeSoLuong = item.HeSoLuong == null ? 0 : hsl;*/
+                ct.LuongCoBan = item.LuongToiThieu * (double)hsl;
+                hsl = originalHsl;
                 item.BHXH = item.BHXH == null ? 0 : item.BHXH;
                 ct.BHXH = item.BHXH * item.LuongToiThieu / 100;
 
@@ -122,11 +156,11 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 ct.NgayNhanLuong = DateTime.Now.Date;
                 ct.TienThuong = 0;
                 ct.TienPhat = 0;
-                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap ;
+                tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap;
                 ct.TongTienLuong = tong.ToString();
                 if (ctl != null)
                 {
-                    db.ChiTietLuongs.Add(ct);
+                    db.ChiTietLuongs.AddOrUpdate(ct);
                 }
                 else
                 {
@@ -138,16 +172,17 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
             return Redirect("/admin/QuanLyLuong");
         }
 
-
+        [HttpGet]
         public ActionResult ThanhToanMotNhanVien(String id)
         {
             var nv = db.NhanViens.Where(n => n.MaNhanVien == id).FirstOrDefault();
-            if (nv != null)
+            if (nv != null) 
             {
                 //tim xem da co trong chi tiet lương chưa
                 var ctl = db.ChiTietLuongs.Where(n => n.MaNhanVien == id).FirstOrDefault();
                 //tìm bảng lương tương ứng với nhân viên
                 var luongthang = db.Luongs.Where(n => n.MaNhanVien == id).FirstOrDefault();
+                var chamcong = db.ChamCongKPIs.Where(n => n.MaNhanVien == id).ToList();
                 ChiTietLuong ct = new ChiTietLuong();
                 DateTime now = DateTime.Now;
                 double tienthue = 0, tong = 0, phucap = 0;
@@ -159,7 +194,37 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 ct.MaNhanVien = luongthang.MaNhanVien;
                 ct.MaLuong = luongthang.MaLuong;
 
-                ct.LuongCoBan = luongthang.LuongToiThieu * (double)luongthang.HeSoLuong;
+
+                double tonghsl = 0;
+                double hsl = luongthang.HeSoLuong ?? 0.0;
+
+                foreach (var chamcong1 in chamcong)
+                {
+
+                    double originalHsl = hsl;
+                    // Tính hệ số lương dựa trên điểm số
+                    if (chamcong1.DiemSo == 100)
+                    {
+                        hsl = originalHsl;
+                    }
+                    else if (chamcong1.DiemSo >= 60 && chamcong1.DiemSo <= 90)
+                    {
+                        hsl = originalHsl - originalHsl * 0.1;
+                    }
+                    else if (chamcong1.DiemSo == 50)
+                    {
+                        hsl = originalHsl - originalHsl * 0.2;
+                    }
+                    else
+                    {
+                        hsl = originalHsl - originalHsl * 0.3;
+                    }
+
+                    /* // Cộng dồn vào tổng lương
+                     tonghsl += hsl;*/
+                }
+                 
+                ct.LuongCoBan = luongthang.LuongToiThieu * (double)hsl;
 
                 luongthang.BHXH = luongthang.BHXH == null ? 0 : luongthang.BHXH;
                 ct.BHXH = luongthang.BHXH * luongthang.LuongToiThieu / 100;
@@ -183,10 +248,14 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 ct.TienPhat = 0;
                 tong = tong + ct.LuongCoBan - (double)(ct.BHXH + ct.BHYT + ct.BHTN) - (double)ct.ThueThuNhap + (double)ct.PhuCap;
                 ct.TongTienLuong = tong.ToString();
-                if (ctl == null)
+                if (ctl != null)
                 {
                     ViewBag.ok = "thanh toán thành công";
-                    db.ChiTietLuongs.Add(ct);
+                    db.ChiTietLuongs.AddOrUpdate(ct);
+                }
+                else
+                {
+                    db.ChiTietLuongs.AddOrUpdate(ct);
                 }
                 db.SaveChanges();
 
@@ -201,21 +270,16 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
         }
         public ActionResult XuatFileLuong(String id)
         {
-            //var l = db.ChiTietLuongs.Where(n => n.MaChiTietBangLuong == id).ToList();
             var ds = db.ChiTietLuongs.ToList();
-            //===================================================
+
             DataTable dt = new DataTable();
-            //Add Datacolumn
-            DataColumn workCol = dt.Columns.Add("Mã nhân viên", typeof(String));
+            dt.Columns.Add("Mã nhân viên", typeof(String));
             dt.Columns.Add("Lương cơ bản", typeof(String));
             dt.Columns.Add("BHXH", typeof(String));
             dt.Columns.Add("Phụ cấp", typeof(String));
             dt.Columns.Add("Thuế thu nhập", typeof(String));
             dt.Columns.Add("Ngày nhận lương", typeof(String));
             dt.Columns.Add("Thực lãnh", typeof(String));
-
-            //Add in the datarow
-
 
             foreach (var item in ds)
             {
@@ -228,32 +292,32 @@ namespace QuanLyNhanSu.Areas.admin.Controllers
                 newRow["Ngày nhận lương"] = item.NgayNhanLuong;
                 newRow["Thực lãnh"] = item.TongTienLuong;
 
-
                 dt.Rows.Add(newRow);
             }
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (ExcelPackage pck = new ExcelPackage())
+            {
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Sheet1");
+                ws.Cells["A1"].LoadFromDataTable(dt, true);
+                var headerCells = ws.Cells["A1:G1"];
+                headerCells.Style.Font.Bold = true;
+                ws.Cells[ws.Dimension.Address].AutoFitColumns();
+                //khung
+                var dataRange = ws.Cells[ws.Dimension.Address];
+                dataRange.Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                dataRange.Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                dataRange.Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                dataRange.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
 
-            //====================================================
-            var gv = new GridView();
-            //gv.DataSource = ds;
-            gv.DataSource = dt;
-            gv.DataBind();
-            Response.ClearContent();
-            Response.Buffer = true;
+                Response.Clear();
+                Response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                Response.AddHeader("content-disposition", "attachment; filename=danh-sach-luong.xlsx");
+                Response.BinaryWrite(pck.GetAsByteArray());
+                Response.End();
+            }
 
-            Response.AddHeader("content-disposition", "attachment; filename=danh-sach-luong.xls");
-            Response.ContentType = "application/ms-excel";
-
-            Response.Charset = "";
-            StringWriter objStringWriter = new StringWriter();
-            HtmlTextWriter objHtmlTextWriter = new HtmlTextWriter(objStringWriter);
-
-            gv.RenderControl(objHtmlTextWriter);
-            Response.Output.Write(objStringWriter.ToString());
-            Response.Flush();
-            Response.End();
             return Redirect("/admin/QuanLyLuong");
         }
-
 
         public ActionResult QuaTrinhTangLuong(String id)
         {
